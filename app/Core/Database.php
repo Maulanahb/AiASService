@@ -12,12 +12,12 @@ class Database {
         $this->loadEnv(__DIR__ . '/../../.env');
         
         $host = getenv('DB_HOST') ?: '127.0.0.1';
-        $port = getenv('DB_PORT') ?: '5432';
+        $port = getenv('DB_PORT') ?: '3306';
         $dbname = getenv('DB_NAME') ?: 'catatan_keuangan';
-        $user = getenv('DB_USER') ?: 'postgres';
-        $pass = getenv('DB_PASS') ?: 'password';
+        $user = getenv('DB_USER') ?: 'root';
+        $pass = getenv('DB_PASS') ?: '';
         
-        $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+        $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
         
         try {
             $this->pdo = new PDO($dsn, $user, $pass);
@@ -38,6 +38,7 @@ class Database {
             list($name, $value) = explode('=', $line, 2);
             $name = trim($name);
             $value = trim($value);
+            $value = trim($value, '"\''); // Remove quotes
             if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
                 putenv(sprintf('%s=%s', $name, $value));
                 $_ENV[$name] = $value;

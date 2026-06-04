@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/api.php';
+const API_BASE_URL = 'http://localhost/AiASService/public/index.php';
 
 export const apiService = {
   getHistory: async () => {

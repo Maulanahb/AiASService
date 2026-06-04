@@ -32,18 +32,20 @@ export function TransactionForm({ onSuccess, setToast, processTransaction }: Pro
   };
 
   return (
-    <div className="brutal-card p-6 bg-pink-300">
-      <h2 className="text-2xl font-bold mb-4 uppercase">📝 Input Cerdas</h2>
+    <div className="glass-card p-6 md:p-8 mb-8">
+      <h2 className="text-2xl font-bold mb-4 text-purple-800 flex items-center gap-2">
+        <span className="text-2xl">✨</span> Input Cerdas
+      </h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <textarea
-          className="brutal-border p-4 h-32 text-lg resize-none focus:outline-none focus:ring-4 focus:ring-black"
+          className="glass-input p-4 h-32 text-lg resize-none"
           placeholder="Ketik transaksimu di sini... (contoh: gajian masuk 5 juta rupiah)"
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={loading}
         />
-        {localError && <div className="text-red-900 bg-red-100 p-3 brutal-border font-medium text-sm animate-pulse">{localError}</div>}
-        <button type="submit" className="brutal-btn" disabled={loading}>
+        {localError && <div className="text-red-700 bg-red-100/80 backdrop-blur-sm p-3 rounded-xl border border-red-200 font-medium text-sm">{localError}</div>}
+        <button type="submit" className="glass-btn self-end md:w-auto w-full" disabled={loading}>
           {loading ? '🤖 Memproses dengan AI...' : 'Simpan Transaksi'}
         </button>
       </form>

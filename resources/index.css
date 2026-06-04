@@ -3,29 +3,32 @@
 @tailwind utilities;
 
 @layer utilities {
-  .brutal-border {
-    @apply border-4 border-black;
+  .glass-card {
+    @apply bg-white/20 backdrop-blur-lg border border-white/40 shadow-xl rounded-3xl transition-all duration-300;
   }
-  .brutal-card {
-    @apply bg-white brutal-border shadow-brutal rounded-none transition-all duration-200;
+  .glass-input {
+    @apply bg-white/30 backdrop-blur-md border border-white/50 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-white/70 transition-all text-gray-800 placeholder-gray-500;
   }
-  .brutal-btn {
-    @apply px-6 py-3 font-bold brutal-border bg-indigo-400 text-black shadow-brutal active:shadow-brutal-hover active:translate-x-1 active:translate-y-1 transition-all rounded-none uppercase cursor-pointer;
+  .glass-btn {
+    @apply bg-gradient-to-r from-purple-500/80 to-blue-500/80 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 backdrop-blur-md border border-white/20 transition-all cursor-pointer;
   }
 }
 
-/* Custom Scrollbar for Neobrutalism */
+/* Custom Scrollbar for Glassmorphism */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #fdfbc8; /* yellow-100 */
-  border-left: 4px solid black;
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4ade80; /* emerald-400 */
-  border: 4px solid black;
+  background: rgba(255, 255, 255, 0.4); 
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6); 
 }
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;

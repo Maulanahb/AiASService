@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/index.php'; // Updated to point to public/index.php
+const API_BASE_URL = 'http://localhost/AiASService/public/index.php';
 
 export const apiClient = {
   get: async (endpoint: string) => {

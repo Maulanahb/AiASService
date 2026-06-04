@@ -21,7 +21,7 @@ class TransactionRepository {
                 COALESCE(SUM(CASE WHEN type = 'pemasukan' THEN amount ELSE 0 END), 0) as total_pemasukan,
                 COALESCE(SUM(CASE WHEN type = 'pengeluaran' THEN amount ELSE 0 END), 0) as total_pengeluaran
             FROM transactions 
-            WHERE TO_CHAR(transaction_date, 'YYYY-MM') = ? AND deleted_at IS NULL
+            WHERE DATE_FORMAT(transaction_date, '%Y-%m') = ? AND deleted_at IS NULL
         ");
         $stmt->execute([$yearMonth]);
         $summary = $stmt->fetch();
@@ -30,23 +30,45 @@ class TransactionRepository {
         return $summary;
     }
 
+    private function generateUuid() {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
+    }
+
     public function create($data, $rawInput) {
+        $id = $this->generateUuid();
         $stmt = $this->pdo->prepare("
-            INSERT INTO transactions (transaction_date, category, description, amount, type, raw_input) 
-            VALUES (?, ?, ?, ?, ?, ?) RETURNING id, transaction_date, category, description, amount, type, raw_input
+            INSERT INTO transactions (id, transaction_date, category, description, amount, type, raw_input) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
         
         $cleanDesc = htmlspecialchars(strip_tags($data['deskripsi'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $transactionDate = $data['tanggal'] ?? date('Y-m-d');
+        $category = $data['kategori'] ?? 'Lainnya';
         
         $stmt->execute([
-            $data['tanggal'] ?? date('Y-m-d'),
-            $data['kategori'] ?? 'Lainnya',
+            $id,
+            $transactionDate,
+            $category,
             $cleanDesc,
             $data['nominal'],
             $data['jenis'],
             $rawInput
         ]);
         
-        return $stmt->fetch();
+        return [
+            'id' => $id,
+            'transaction_date' => $transactionDate,
+            'category' => $category,
+            'description' => $cleanDesc,
+            'amount' => $data['nominal'],
+            'type' => $data['jenis'],
+            'raw_input' => $rawInput
+        ];
     }
 }

@@ -5,7 +5,7 @@ use Exception;
 
 class GeminiService {
     private $apiKey;
-    private $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    private $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     public function __construct($apiKey) {
         if (!$apiKey || $apiKey === 'your_gemini_api_key_here') {
@@ -55,7 +55,7 @@ Tanggal hari ini: $today.";
         curl_close($ch);
 
         if ($httpCode !== 200) {
-            throw new Exception("Layanan AI merespons dengan HTTP Code: " . $httpCode);
+            throw new Exception("Layanan AI merespons dengan HTTP Code: " . $httpCode . " - Raw: " . $response);
         }
 
         $geminiData = json_decode($response, true);

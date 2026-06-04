@@ -14,40 +14,42 @@ export function TransactionList({ transactions }: Props) {
   };
 
   return (
-    <div className="brutal-card bg-emerald-200 mt-8 overflow-hidden flex flex-col h-[500px]">
-      <div className="p-6 border-b-4 border-black bg-emerald-300 shrink-0 flex justify-between items-center">
-        <h2 className="text-2xl font-bold uppercase tracking-tight">📊 Riwayat Transaksi</h2>
-        <span className="font-bold bg-white brutal-border px-3 py-1 text-sm">{transactions.length} Data</span>
+    <div className="glass-card mt-8 overflow-hidden flex flex-col h-[500px]">
+      <div className="p-6 border-b border-white/30 bg-white/40 shrink-0 flex justify-between items-center">
+        <h2 className="text-2xl font-bold tracking-tight text-purple-900">📊 Riwayat Transaksi</h2>
+        <span className="font-semibold bg-white/50 text-purple-800 rounded-full px-4 py-1 text-sm shadow-sm border border-white/50">
+          {transactions.length} Data
+        </span>
       </div>
       <div className="overflow-x-auto overflow-y-auto flex-1 relative custom-scrollbar">
         <table className="w-full text-left border-collapse min-w-[800px]">
-          <thead className="sticky top-0 z-10 shadow-[0_4px_0_rgba(0,0,0,1)]">
-            <tr className="bg-emerald-100 uppercase text-sm font-bold">
-              <th className="p-4 border-r-4 border-black border-b-4">Tanggal</th>
-              <th className="p-4 border-r-4 border-black border-b-4">Kategori</th>
-              <th className="p-4 border-r-4 border-black border-b-4">Deskripsi</th>
-              <th className="p-4 border-r-4 border-black border-b-4">Nominal</th>
-              <th className="p-4 border-b-4 border-black">Jenis</th>
+          <thead className="sticky top-0 z-10 shadow-sm">
+            <tr className="bg-white/60 backdrop-blur-md text-sm font-semibold text-gray-700">
+              <th className="p-4 border-b border-white/40">Tanggal</th>
+              <th className="p-4 border-b border-white/40">Kategori</th>
+              <th className="p-4 border-b border-white/40">Deskripsi</th>
+              <th className="p-4 border-b border-white/40">Nominal</th>
+              <th className="p-4 border-b border-white/40">Jenis</th>
             </tr>
           </thead>
           <tbody>
             {transactions.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-12 text-center font-bold text-lg bg-white opacity-70">
+                <td colSpan={5} className="p-12 text-center font-medium text-lg text-gray-500 bg-white/10">
                   Belum ada transaksi bulan ini.
                 </td>
               </tr>
             ) : (
               transactions.map((t, index) => (
-                <tr key={t.id} className={`hover:bg-yellow-100 transition-colors ${index !== transactions.length - 1 ? "border-b-4 border-black bg-white" : "bg-white"}`}>
-                  <td className="p-4 border-r-4 border-black font-medium">{t.transaction_date}</td>
-                  <td className="p-4 border-r-4 border-black">
-                    <span className="bg-yellow-200 px-2 py-1 brutal-border text-xs font-bold uppercase">{t.category}</span>
+                <tr key={t.id} className={`hover:bg-white/40 transition-colors ${index !== transactions.length - 1 ? "border-b border-white/20 bg-white/20" : "bg-white/20"}`}>
+                  <td className="p-4 font-medium text-gray-700">{t.transaction_date}</td>
+                  <td className="p-4">
+                    <span className="bg-blue-100/80 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold shadow-sm border border-blue-200/50">{t.category}</span>
                   </td>
-                  <td className="p-4 border-r-4 border-black">{t.description}</td>
-                  <td className="p-4 border-r-4 border-black font-black text-xl tracking-tight">{formatRupiah(t.amount)}</td>
-                  <td className="p-4 font-bold uppercase">
-                    <span className={t.type === 'pemasukan' ? 'text-emerald-700 bg-emerald-100 px-2 py-1 brutal-border' : 'text-red-700 bg-red-100 px-2 py-1 brutal-border'}>
+                  <td className="p-4 text-gray-800">{t.description}</td>
+                  <td className="p-4 font-bold text-lg text-gray-900 tracking-tight">{formatRupiah(t.amount)}</td>
+                  <td className="p-4 font-semibold">
+                    <span className={t.type === 'pemasukan' ? 'text-green-700 bg-green-100/80 px-3 py-1 rounded-full shadow-sm border border-green-200/50' : 'text-rose-700 bg-rose-100/80 px-3 py-1 rounded-full shadow-sm border border-rose-200/50'}>
                       {t.type}
                     </span>
                   </td>

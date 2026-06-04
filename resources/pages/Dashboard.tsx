@@ -24,8 +24,8 @@ export function Dashboard() {
 
   if (isLoadingInitial) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-yellow-50 text-gray-900 font-['Space_Grotesk']">
-        <div className="text-3xl font-black uppercase tracking-tight animate-bounce drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-700">
+        <div className="text-3xl font-semibold tracking-wide animate-pulse">
           Memuat Data...
         </div>
       </div>
@@ -33,46 +33,48 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8 max-w-5xl mx-auto">
-      {toast && (
-        <div className="fixed top-4 right-4 z-50 brutal-card bg-green-300 px-6 py-4 font-bold animate-[slideIn_0.3s_ease-out]">
-          {toast}
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-800 font-sans selection:bg-purple-300 selection:text-purple-900">
+      <div className="p-4 md:p-8 max-w-5xl mx-auto">
+        {toast && (
+          <div className="fixed top-4 right-4 z-50 glass-card !bg-green-100/80 !border-green-300 px-6 py-4 font-semibold text-green-800 animate-[slideIn_0.3s_ease-out]">
+            {toast}
+          </div>
+        )}
 
-      {error && (
-        <div className="brutal-card bg-red-400 text-black font-bold p-4 mb-6">
-          🚨 Gagal memuat data dari server: {error}
-        </div>
-      )}
+        {error && (
+          <div className="glass-card !bg-red-100/80 !border-red-300 text-red-800 font-semibold p-4 mb-6">
+            🚨 Gagal memuat data dari server: {error}
+          </div>
+        )}
 
-      <header className="mb-12 text-center mt-4">
-        <h1 className="text-5xl font-black uppercase mb-4 tracking-tight drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
-          AI Catatan Keuangan
-        </h1>
-        <p className="text-xl font-medium brutal-border bg-yellow-200 inline-block px-4 py-2 hover:bg-yellow-300 transition-colors cursor-default">
-          Catat pengeluaranmu cukup dengan mengetik kalimat biasa!
-        </p>
-      </header>
+        <header className="mb-12 text-center mt-4">
+          <h1 className="text-5xl font-extrabold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+            AI Catatan Keuangan
+          </h1>
+          <p className="text-lg font-medium glass-card inline-block px-6 py-2 text-purple-700 !rounded-full !shadow-md">
+            Catat pengeluaranmu cukup dengan mengetik kalimat biasa! ✨
+          </p>
+        </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="brutal-card bg-cyan-300 p-6 hover:-translate-y-1 hover:shadow-[8px_8px_0_rgba(0,0,0,1)] cursor-pointer">
-          <h3 className="font-bold uppercase mb-2">Pemasukan Bulan Ini</h3>
-          <p className="text-3xl font-black">{formatRupiah(summary.total_pemasukan)}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="glass-card p-6 border-t-4 !border-t-blue-400 cursor-default">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-blue-600 mb-2">Pemasukan Bulan Ini</h3>
+            <p className="text-3xl font-bold text-gray-800">{formatRupiah(summary.total_pemasukan)}</p>
+          </div>
+          <div className="glass-card p-6 border-t-4 !border-t-pink-400 cursor-default">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-pink-600 mb-2">Pengeluaran Bulan Ini</h3>
+            <p className="text-3xl font-bold text-gray-800">{formatRupiah(summary.total_pengeluaran)}</p>
+          </div>
+          <div className="glass-card p-6 border-t-4 !border-t-purple-400 cursor-default">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-purple-600 mb-2">Saldo Bersih</h3>
+            <p className="text-3xl font-bold text-gray-800">{formatRupiah(summary.saldo_bersih)}</p>
+          </div>
         </div>
-        <div className="brutal-card bg-rose-300 p-6 hover:-translate-y-1 hover:shadow-[8px_8px_0_rgba(0,0,0,1)] cursor-pointer">
-          <h3 className="font-bold uppercase mb-2">Pengeluaran Bulan Ini</h3>
-          <p className="text-3xl font-black">{formatRupiah(summary.total_pengeluaran)}</p>
-        </div>
-        <div className="brutal-card bg-violet-300 p-6 hover:-translate-y-1 hover:shadow-[8px_8px_0_rgba(0,0,0,1)] cursor-pointer">
-          <h3 className="font-bold uppercase mb-2">Saldo Bersih</h3>
-          <p className="text-3xl font-black">{formatRupiah(summary.saldo_bersih)}</p>
-        </div>
+
+        <TransactionForm onSuccess={refreshData} setToast={setToast} processTransaction={processTransaction} />
+        
+        <TransactionList transactions={transactions} />
       </div>
-
-      <TransactionForm onSuccess={refreshData} setToast={setToast} processTransaction={processTransaction} />
-      
-      <TransactionList transactions={transactions} />
     </div>
   );
 }
