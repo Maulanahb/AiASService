@@ -10,24 +10,57 @@ class TransactionRepository {
         $this->pdo = $pdo;
     }
 
-    public function getAllActive() {
-        $stmt = $this->pdo->query("SELECT * FROM transactions WHERE deleted_at IS NULL ORDER BY transaction_date DESC, created_at DESC LIMIT 100");
-        return $stmt->fetchAll();
+    public function getAllActive($period = 'all') {
+        $sql = "SELECT * FROM transactions WHERE deleted_at IS NULL";
+        
+        $today = date('Y-m-d');
+        $thisMonth = date('Y-m');
+        $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));
+
+        if ($period === 'harian') {
+            $sql .= " AND DATE(transaction_date) = '{$today}'";
+        } elseif ($period === 'mingguan') {
+            $sql .= " AND DATE(transaction_date) >= '{$sevenDaysAgo}'";
+        } elseif ($period === 'bulanan') {
+            $sql .= " AND DATE_FORMAT(transaction_date, '%Y-%m') = '{$thisMonth}'";
+        }
+        
+        $sql .= " ORDER BY transaction_date DESC, created_at DESC LIMIT 200";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getMonthlySummary($yearMonth) {
-        $stmt = $this->pdo->prepare("
+    public function getSummary($period = 'all') {
+        $sql = "
             SELECT 
                 COALESCE(SUM(CASE WHEN type = 'pemasukan' THEN amount ELSE 0 END), 0) as total_pemasukan,
                 COALESCE(SUM(CASE WHEN type = 'pengeluaran' THEN amount ELSE 0 END), 0) as total_pengeluaran
             FROM transactions 
-            WHERE DATE_FORMAT(transaction_date, '%Y-%m') = ? AND deleted_at IS NULL
-        ");
-        $stmt->execute([$yearMonth]);
-        $summary = $stmt->fetch();
+            WHERE deleted_at IS NULL
+        ";
+
+        $today = date('Y-m-d');
+        $thisMonth = date('Y-m');
+        $sevenDaysAgo = date('Y-m-d', strtotime('-7 days'));
+
+        if ($period === 'harian') {
+            $sql .= " AND DATE(transaction_date) = '{$today}'";
+        } elseif ($period === 'mingguan') {
+            $sql .= " AND DATE(transaction_date) >= '{$sevenDaysAgo}'";
+        } elseif ($period === 'bulanan') {
+            $sql .= " AND DATE_FORMAT(transaction_date, '%Y-%m') = '{$thisMonth}'";
+        }
+
+        $stmt = $this->pdo->query($sql);
+        $summary = $stmt->fetch(PDO::FETCH_ASSOC);
         $summary['saldo_bersih'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
         
         return $summary;
+    }
+
+    public function delete($id) {
+        $stmt = $this->pdo->prepare("UPDATE transactions SET deleted_at = NOW() WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 
     private function generateUuid() {

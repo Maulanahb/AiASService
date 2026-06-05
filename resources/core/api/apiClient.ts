@@ -22,5 +22,17 @@ export const apiClient = {
       throw new Error(data.error || 'Gagal mengirim data ke API');
     }
     return data;
+  },
+
+  delete: async (endpoint: string) => {
+    const response = await fetch(`${API_BASE_URL}?action=${endpoint}`, {
+      method: 'DELETE'
+    });
+    
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Gagal menghapus data dari API');
+    }
+    return data;
   }
 };

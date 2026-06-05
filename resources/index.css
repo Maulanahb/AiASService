@@ -1,34 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .glass-card {
-    @apply bg-white/20 backdrop-blur-lg border border-white/40 shadow-xl rounded-3xl transition-all duration-300;
-  }
-  .glass-input {
-    @apply bg-white/30 backdrop-blur-md border border-white/50 rounded-2xl shadow-inner focus:outline-none focus:ring-2 focus:ring-white/70 transition-all text-gray-800 placeholder-gray-500;
-  }
-  .glass-btn {
-    @apply bg-gradient-to-r from-purple-500/80 to-blue-500/80 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 backdrop-blur-md border border-white/20 transition-all cursor-pointer;
+@layer base {
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    @apply font-sans antialiased overflow-x-hidden;
   }
 }
 
-/* Custom Scrollbar for Glassmorphism */
+@layer utilities {
+  .ai-glass-panel {
+    background-color: rgba(255, 255, 255, 0.7);
+    @apply backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl transition-all duration-300;
+  }
+  
+  .ai-glass-pill {
+    @apply bg-white/50 backdrop-blur-[8px] border border-slate-200 rounded-full font-semibold transition-all text-slate-700 shadow-sm;
+  }
+
+  .ai-input {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #0F172A;
+    @apply w-full border border-slate-200 rounded-xl px-4 py-3 outline-none transition-all duration-300 shadow-sm;
+  }
+  .ai-input::placeholder {
+    color: #94A3B8;
+  }
+  
+  .ai-input:focus {
+    border-color: #2563EB;
+    @apply shadow-[0_0_0_2px_rgba(37,99,235,0.2)];
+  }
+
+  .ai-btn-primary {
+    color: #FFFFFF;
+    background-image: linear-gradient(to right, #2563EB, #8B5CF6);
+    @apply relative overflow-hidden font-bold py-3 px-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  /* Shimmer effect for button */
+  .ai-btn-primary::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent;
+  }
+  .ai-btn-primary:hover::after {
+    @apply animate-shimmer;
+  }
+}
+
+/* Subtle Animated Mesh Background for Light Mode */
+.bg-mesh {
+  background-color: #F8FAFC;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,100%,96%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(213,100%,95%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(180,100%,96%,1) 0, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Light Mode Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1); 
-  border-radius: 10px;
+  @apply bg-transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4); 
-  border-radius: 10px;
+  @apply bg-slate-300 rounded-full;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.6); 
+  @apply bg-slate-400;
 }
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;

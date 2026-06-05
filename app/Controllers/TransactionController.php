@@ -16,8 +16,9 @@ class TransactionController {
 
     public function getHistory() {
         try {
-            $transactions = $this->transactionRepo->getAllActive();
-            $summary = $this->transactionRepo->getMonthlySummary(date('Y-m'));
+            $period = $_GET['period'] ?? 'all';
+            $transactions = $this->transactionRepo->getAllActive($period);
+            $summary = $this->transactionRepo->getSummary($period);
 
             $this->jsonResponse([
                 'status' => 'success',
@@ -56,6 +57,24 @@ class TransactionController {
             ]);
         } catch (Exception $e) {
             $this->jsonResponse(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function deleteTransaction() {
+        $id = $_GET['id'] ?? '';
+        if (empty($id)) {
+            $this->jsonResponse(['error' => 'ID transaksi tidak valid'], 400);
+            return;
+        }
+
+        try {
+            $this->transactionRepo->delete($id);
+            $this->jsonResponse([
+                'status' => 'success',
+                'message' => 'Transaksi berhasil dihapus'
+            ]);
+        } catch (Exception $e) {
+            $this->jsonResponse(['error' => 'Gagal menghapus transaksi', 'details' => $e->getMessage()], 500);
         }
     }
 
